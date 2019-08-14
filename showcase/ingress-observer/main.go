@@ -131,9 +131,9 @@ func parseAnnotations(meta metav1.ObjectMeta) (*models.ServiceSettings, error) {
 	}).Debug("[ParseAnnotations]")
 
 	settings := &models.ServiceSettings{
-		IngressClass: meta.Annotations["kubernetes.io/ingress.class"],
-		AuthURL:      meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
-		AuthSignIn:   meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
+		AppName:    meta.Annotations["oauth2-proxy-manager.lunasys.dev/app-name"],
+		AuthURL:    meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
+		AuthSignIn: meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
 		GitHub: models.GitHubProvider{
 			Organization: meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-org"],
 			Teams:        strings.Split(meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-teams"], ","),

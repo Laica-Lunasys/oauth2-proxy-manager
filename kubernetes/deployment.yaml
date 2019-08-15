@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy-manager
+  namespace: oauth2-proxy
+  labels:
+    app.kubernetes.io/name: oauth2-proxy-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: oauth2-proxy-manager
+      app.kubernetes.io/instance: oauth2-proxy-manager
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: oauth2-proxy-manager
+        app.kubernetes.io/instance: oauth2-proxy-manager
+    spec:
+      serviceAccountName: oauth2-proxy
+      containers:
+        - name: oauth2-proxy-manager
+          image: "gcr.io/laica-lunasys/oauth2-proxy-manager:latest"
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: oauth2-proxy-manager-config
+            - secretRef:
+                name: oauth2-proxy-manager-secret
+          resources:
+            limits:
+              cpu: 100m
+              memory: 512Mi
+            requests:
+              cpu: 20m
+              memory: 128Mi

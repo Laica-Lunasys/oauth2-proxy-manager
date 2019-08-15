@@ -20,7 +20,7 @@ spec:
       serviceAccountName: oauth2-proxy
       containers:
         - name: oauth2-proxy-manager
-          image: "lunasys/oauth2-proxy-manager:latest"
+          image: "gcr.io/laica-lunasys/oauth2-proxy-manager:latest"
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

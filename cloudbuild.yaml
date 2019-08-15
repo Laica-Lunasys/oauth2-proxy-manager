@@ -1,0 +1,16 @@
+steps:
+  - id: "build:showcase.ingress-observer"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '.', '-f', 'ingress-observer.Dockerfile', '-t', 'gcr.io/laica-lunasys/oauth2-proxy-manager/ingress-observer']
+  - id: "push:showcase.ingress-observer"
+    waitFor: ['build:showcase.ingress-observer']
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/laica-lunasys/oauth2-proxy-manager/ingress-observer:latest']
+
+  - id: "build:showcase.create-oauth2-proxy"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '.', '-f', 'create-oauth2-proxy.Dockerfile', '-t', 'gcr.io/laica-lunasys/oauth2-proxy-manager/create-oauth2-proxy']
+  - id: "push:showcase.create-oauth2-proxy"
+    waitFor: ['build:showcase.create-oauth2-proxy']
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/laica-lunasys/oauth2-proxy-manager/create-oauth2-proxy:latest']

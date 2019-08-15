@@ -2,12 +2,13 @@ package main
 
 import (
 	"errors"
-	"flag"
+	"os"
 	"strings"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	"k8s.io/client-go/rest"
 
 	"github.com/Laica-Lunasys/oauth2-proxy-manager/logger"
 	"github.com/Laica-Lunasys/oauth2-proxy-manager/models"
@@ -26,17 +27,27 @@ func main() {
 	logger.Init()
 
 	logrus.Info("[Showcase] Observing Ingress...")
-	var kubeconfig string
-	var master string
 
-	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&master, "master", "", "master url")
-	flag.Parse()
+	var config *rest.Config
 
-	// creates the connection
-	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
+	_, err := rest.InClusterConfig()
 	if err != nil {
-		logrus.Fatal(err)
+		// Not Cluster
+		kubeconfig := os.Getenv("KUBECONFIG")
+		if len(kubeconfig) == 0 {
+			kubeconfig = os.Getenv("HOME") + "/.kube/config"
+		}
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
+		if err != nil {
+			logrus.Panic(err)
+		}
+	} else {
+		// In Cluster
+		conf, err := rest.InClusterConfig()
+		if err != nil {
+			logrus.Fatalf("Failed get Kubernetes config: %v", err)
+		}
+		config = conf
 	}
 
 	// creates the clientset

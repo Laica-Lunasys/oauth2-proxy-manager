@@ -162,6 +162,10 @@ func (c *Controller) applyIngress(settings *models.ServiceSettings) {
 		},
 	}
 
+	if len(c.Ingress.IngressClass) != 0 {
+		ingress.Annotations["kubernetes.io/ingress.class"] = c.Ingress.IngressClass
+	}
+
 	if len(c.Ingress.TLSHosts) != 0 && len(c.Ingress.TLSSecretName) != 0 {
 		ingress.Spec.TLS = []extensionsv1beta1.IngressTLS{
 			extensionsv1beta1.IngressTLS{

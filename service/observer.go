@@ -104,15 +104,15 @@ func parseAnnotations(meta metav1.ObjectMeta) (*models.ServiceSettings, error) {
 		return nil, errors.New("auth-signin not found. skip.")
 	}
 
-	if _, ok := meta.Annotations["oauth2-proxy-manager.lunasys.dev/app-name"]; !ok {
+	if _, ok := meta.Annotations["oauth2-proxy-manager.k8s.io/app-name"]; !ok {
 		return nil, errors.New("app-name not found. skip.")
 	}
 
-	if _, ok := meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-org"]; !ok {
+	if _, ok := meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"]; !ok {
 		return nil, errors.New("github-org not found. skip.")
 	}
 
-	if _, ok := meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-teams"]; !ok {
+	if _, ok := meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"]; !ok {
 		return nil, errors.New("github-teams not found. skip.")
 	}
 
@@ -120,17 +120,17 @@ func parseAnnotations(meta metav1.ObjectMeta) (*models.ServiceSettings, error) {
 		"ingress.class": meta.Annotations["kubernetes.io/ingress.class"],
 		"auth-url":      meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
 		"auth-signin":   meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
-		"github-org":    meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-org"],
-		"github-teams":  meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-teams"],
+		"github-org":    meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"],
+		"github-teams":  meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"],
 	}).Debug("[ParseAnnotations]")
 
 	settings := &models.ServiceSettings{
-		AppName:    meta.Annotations["oauth2-proxy-manager.lunasys.dev/app-name"],
+		AppName:    meta.Annotations["oauth2-proxy-manager.k8s.io/app-name"],
 		AuthURL:    meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
 		AuthSignIn: meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
 		GitHub: models.GitHubProvider{
-			Organization: meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-org"],
-			Teams:        strings.Split(meta.Annotations["oauth2-proxy-manager.lunasys.dev/github-teams"], ","),
+			Organization: meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"],
+			Teams:        strings.Split(meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"], ","),
 		},
 	}
 

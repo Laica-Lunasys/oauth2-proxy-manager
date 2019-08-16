@@ -1,6 +1,11 @@
 oauth2-proxy-manager
 ============================
 
+Docker image
+==============================
+`gcr.io/laica-lunasys/oauth2-proxy-manager:latest`
+
+
 Setup
 =====================================
 ## 0. Install ingress-nginx(nginx-ingress) in your cluster.

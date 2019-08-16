@@ -66,8 +66,8 @@ func NewController(clientset *kubernetes.Clientset) (*Controller, error) {
 	return c, nil
 }
 
-func (c *Controller) Create(settings *models.ServiceSettings) {
-	logrus.Infof("[Controller] Create oauth2_proxy(%s)...", settings.AppName)
+func (c *Controller) Apply(settings *models.ServiceSettings) {
+	logrus.Infof("[Controller] Applying oauth2_proxy(%s)...", settings.AppName)
 	c.applyService(settings)
 	c.applySecret(settings)
 	c.applyConfigMap(settings)

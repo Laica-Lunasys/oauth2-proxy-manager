@@ -1,12 +1,21 @@
 steps:
   - id: "build:oauth2-proxy-manager"
     name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '.', '-t', 'gcr.io/laica-lunasys/oauth2-proxy-manager']
+    entrypoint: /bin/sh
+    args:
+      - -c
+      - if [ \"$BRANCH_NAME\" = \"master\" ]; then
+        docker build . -t gcr.io/laica-lunasys/oauth2-proxy-manager:latest;
+        fi
   - id: "push:oauth2-proxy-manager"
     waitFor: ['build:oauth2-proxy-manager']
     name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/laica-lunasys/oauth2-proxy-manager:latest']
-
+    entrypoint: /bin/sh
+    args:
+      - -c
+      - if [ \"$BRANCH_NAME\" = \"master\" ]; then
+        docker push gcr.io/laica-lunasys/oauth2-proxy-manager:latest;
+        fi
     #  - id: "build:showcase.ingress-observer"
     #    name: 'gcr.io/cloud-builders/docker'
     #    args: ['build', '.', '-f', 'ingress-observer.Dockerfile', '-t', 'gcr.io/laica-lunasys/oauth2-proxy-manager/ingress-observer']

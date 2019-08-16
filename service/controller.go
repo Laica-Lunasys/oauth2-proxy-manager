@@ -1,6 +1,7 @@
 package service
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"os"
 	"strings"
@@ -26,6 +27,7 @@ type Controller struct {
 type OAuth2ProxyEnv struct {
 	Domain          string
 	CookieDomain    string
+	CookieSalt      string
 	WhitelistDomain string
 	Provider        string
 	ClientID        string
@@ -44,6 +46,7 @@ func makeController(clientset *kubernetes.Clientset) *Controller {
 		Env: OAuth2ProxyEnv{
 			Domain:          os.Getenv("OAUTH2_PROXY_DOMAIN"),
 			CookieDomain:    os.Getenv("COOKIE_DOMAIN"),
+			CookieSalt:      os.Getenv("COOKIE_SALT"),
 			WhitelistDomain: os.Getenv("WHITELIST_DOMAIN"),
 			Provider:        os.Getenv("PROVIDER"),
 			ClientID:        os.Getenv("OAUTH2_PROXY_CLIENT_ID"),
@@ -198,6 +201,12 @@ func (c *Controller) applyIngress(settings *models.ServiceSettings) {
 
 func (c *Controller) applySecret(settings *models.ServiceSettings) {
 	secretClient := c.Clientset.CoreV1().Secrets("oauth2-proxy")
+	cookieSecret := fmt.Sprintf("%x", sha256.Sum256([]byte(
+		c.Env.Provider+
+			settings.GitHub.Organization+
+			strings.Join(settings.GitHub.Teams, "")+
+			settings.AppName+c.Env.CookieSalt,
+	)))
 	secret := &apiv1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("oauth2-proxy-github-%s-%s", settings.GitHub.Organization, settings.AppName),
@@ -205,7 +214,7 @@ func (c *Controller) applySecret(settings *models.ServiceSettings) {
 		},
 		Type: apiv1.SecretTypeOpaque,
 		StringData: map[string]string{
-			fmt.Sprintf("%s-%s-%s-cookie-secret", c.Env.Provider, settings.GitHub.Organization, settings.AppName): "PLEASERANDOM",
+			fmt.Sprintf("%s-%s-%s-cookie-secret", c.Env.Provider, settings.GitHub.Organization, settings.AppName): cookieSecret,
 			"client-secret": c.Env.ClientSecret,
 			"client-id":     c.Env.ClientID,
 		},

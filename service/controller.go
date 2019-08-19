@@ -85,9 +85,6 @@ func (c *Controller) applyService(settings *models.ServiceSettings) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("oauth2-proxy-github-%s-%s", settings.GitHub.Organization, settings.AppName),
 			Namespace: "oauth2-proxy",
-			Annotations: map[string]string{
-				"kubernetes.io/ingress.class": "nginx",
-			},
 		},
 		Spec: apiv1.ServiceSpec{
 			Type: apiv1.ServiceTypeNodePort,
@@ -139,6 +136,9 @@ func (c *Controller) applyIngress(settings *models.ServiceSettings) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "oauth2-proxy",
 			Namespace: "oauth2-proxy",
+			Annotations: map[string]string{
+				"kubernetes.io/ingress.class": "nginx",
+			},
 		},
 		Spec: extensionsv1beta1.IngressSpec{
 			Rules: []extensionsv1beta1.IngressRule{

@@ -45,7 +45,7 @@ func (ob *Observer) Run() {
 
 				settings, err := parseAnnotations(meta)
 				if err == nil {
-					ob.Controller.Create(settings)
+					ob.Controller.Apply(settings)
 					//logrus.WithField("settings", settings).Info("Dummy: Update Deployment / ConfigMap / Service / Secret / Ingress")
 				}
 			}
@@ -59,7 +59,7 @@ func (ob *Observer) Run() {
 
 				settings, err := parseAnnotations(meta)
 				if err == nil {
-					ob.Controller.Create(settings)
+					ob.Controller.Apply(settings)
 					logrus.WithField("settings", settings).Info("Dummy: Update Deployment / ConfigMap / Service / Secret / Ingress")
 				}
 			}

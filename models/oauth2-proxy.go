@@ -2,10 +2,11 @@ package models
 
 // ServiceSettings - Settings from individual services annotations.
 type ServiceSettings struct {
-	AppName    string
-	AuthURL    string
-	AuthSignIn string
-	GitHub     GitHubProvider
+	AppName         string
+	AuthURL         string
+	AuthSignIn      string
+	SetXAuthRequest string
+	GitHub          GitHubProvider
 }
 
 // GitHubProvider - GitHub Provicer

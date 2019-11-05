@@ -116,18 +116,25 @@ func parseAnnotations(meta metav1.ObjectMeta) (*models.ServiceSettings, error) {
 		return nil, errors.New("github-teams not found. skip.")
 	}
 
+	setXAuthRequest, ok := meta.Annotations["oauth2-proxy-manager.k8s.io/set-xauthrequest"]
+	if !ok {
+		setXAuthRequest = ""
+	}
+
 	logrus.WithFields(logrus.Fields{
-		"ingress.class": meta.Annotations["kubernetes.io/ingress.class"],
-		"auth-url":      meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
-		"auth-signin":   meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
-		"github-org":    meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"],
-		"github-teams":  meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"],
+		"ingress.class":    meta.Annotations["kubernetes.io/ingress.class"],
+		"auth-url":         meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
+		"auth-signin":      meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
+		"github-org":       meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"],
+		"github-teams":     meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"],
+		"set-xauthrequest": setXAuthRequest,
 	}).Debug("[ParseAnnotations]")
 
 	settings := &models.ServiceSettings{
-		AppName:    meta.Annotations["oauth2-proxy-manager.k8s.io/app-name"],
-		AuthURL:    meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
-		AuthSignIn: meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
+		AppName:         meta.Annotations["oauth2-proxy-manager.k8s.io/app-name"],
+		AuthURL:         meta.Annotations["nginx.ingress.kubernetes.io/auth-url"],
+		AuthSignIn:      meta.Annotations["nginx.ingress.kubernetes.io/auth-signin"],
+		SetXAuthRequest: setXAuthRequest,
 		GitHub: models.GitHubProvider{
 			Organization: meta.Annotations["oauth2-proxy-manager.k8s.io/github-org"],
 			Teams:        strings.Split(meta.Annotations["oauth2-proxy-manager.k8s.io/github-teams"], ","),

@@ -1,0 +1,19 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: build-docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Login to Google Container Registry
+        env:
+          GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+        run: docker login -u _json_key -p "$(echo $GCP_SERVICE_ACCOUNT)" gcr.io
+      - name: Build Image
+        run: docker build . -t gcr.io/laica-lunasys/oauth2-proxy-manager:latest
+      - name: Push Image
+        run: docker push gcr.io/laica-lunasys/oauth2-proxy-manager:latest

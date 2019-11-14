@@ -1,5 +1,6 @@
 oauth2-proxy-manager
 ============================
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager?ref=badge_shield)
 
 Docker image
 ==============================

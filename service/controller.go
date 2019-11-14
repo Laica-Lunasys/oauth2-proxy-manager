@@ -347,6 +347,10 @@ func (c *Controller) applyDeployment(settings *models.ServiceSettings) {
 										},
 									},
 								},
+								apiv1.EnvVar{
+									Name:  "OAUTH2_PROXY_SET_XAUTHREQUEST",
+									Value: settings.SetXAuthRequest,
+								},
 							},
 							Ports: []apiv1.ContainerPort{
 								{

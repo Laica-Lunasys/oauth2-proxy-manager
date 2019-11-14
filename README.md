@@ -9,6 +9,8 @@ Docker image
 Setup
 =====================================
 ## 0. Install ingress-nginx(nginx-ingress) in your cluster.
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager?ref=badge_shield)
+
 > Helm chart: https://github.com/helm/charts/tree/master/stable/nginx-ingress
 
 ## 1. GitHub
@@ -69,3 +71,7 @@ spec:
 ```
 
 ## Tada! 🎉
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FLaica-Lunasys%2Foauth2-proxy-manager?ref=badge_large)

@@ -17,4 +17,3 @@ jobs:
           registry: quay.io
           tags: ${{ github.sha }}
           tag_with_ref: true
-          tag_with_sha: true
